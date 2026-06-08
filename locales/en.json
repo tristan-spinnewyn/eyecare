@@ -1,0 +1,193 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "stats": "Statistics",
+    "settings": "Settings"
+  },
+  "brand": { "tagline": "VISION HEALTH" },
+
+  "dashboard": {
+    "status": { "label": "Eye Care Status" },
+    "title": "Your Vision Health",
+    "subtitle": "Take a moment to let your eyes wander. The 20-20-20 rule helps reduce digital strain by refocusing your lens.",
+    "btn": {
+      "start_break": "▶  Start Break Now",
+      "skip_cycle": "Skip Break",
+      "pause": "⏸  Pause",
+      "reset": "↺  Reset"
+    },
+    "pro_tip": "Pro Tip",
+    "pauses_today": "PAUSES COMPLETED TODAY",
+    "focus_score": "DAILY FOCUS SCORE",
+    "ambient_title": "Ambient Light",
+    "ambient_text": "Adjust your screen brightness to match your surroundings to reduce eye strain."
+  },
+  "warning": { "tray": "System tray not available. On GNOME, install the \"AppIndicator and KStatusNotifierItem Support\" extension." },
+
+  "timer": {
+    "until_break": "UNTIL NEXT BREAK",
+    "start_break": "START YOUR BREAK",
+    "eyes_resting": "EYES RESTING",
+    "paused": "TIMER PAUSED",
+    "awaiting_activity": "MOVE TO RESUME",
+    "ready": "READY"
+  },
+
+  "status": {
+    "active": "ACTIVE",
+    "break_time": "BREAK TIME",
+    "on_break": "ON BREAK",
+    "paused": "PAUSED",
+    "awaiting_activity": "WAITING",
+    "ready": "READY"
+  },
+
+  "tip": [
+    "Palming: rub your hands together to warm them, then gently cup your closed eyes for 20 seconds.",
+    "Blink consciously: we blink about 15×/min normally, but only 5×/min in front of a screen.",
+    "20-20-20 rule: every 20 minutes, look at something 6 metres away for 20 seconds.",
+    "Adjust your screen brightness to match your ambient lighting.",
+    "Position your screen slightly below eye level to reduce eye strain."
+  ],
+
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Configure Eyecare 20-20-20 for optimal eye health.",
+    "section": {
+      "time": "Time Intervals",
+      "audio": "Audio Notifications",
+      "advanced": "Advanced Modes",
+      "language": "Language"
+    },
+    "work_duration": "Work Duration",
+    "work_desc": "Focus time before the break",
+    "break_duration": "Break Duration",
+    "break_desc": "Duration of the 20-20-20 rule",
+    "alert_sound": "Alert Sound",
+    "sound_preview": "Sound Preview",
+    "strict": "Strict Mode",
+    "strict_desc": "Lock screen during breaks",
+    "system_theme": "System Theme",
+    "system_theme_desc": "Automatically follow the OS light/dark mode",
+    "dark_theme": "Dark Theme",
+    "dark_theme_desc": "Night mode interface",
+    "break_done_sound": "Break done sound",
+    "autostart": "Auto Start",
+    "autostart_desc": "Launch at system startup",
+    "language_label": "Interface language",
+    "btn": {
+      "reset": "Reset to defaults",
+      "cancel": "Cancel",
+      "save": "Save changes"
+    },
+    "feedback": {
+      "reset": "Default values restored. Click Save to confirm.",
+      "autostart_error": "Auto-start: %s"
+    },
+    "unit": {
+      "min": "%d min",
+      "sec": "%d sec",
+      "percent": "%d%%"
+    },
+    "volume": "Volume",
+    "lang": {
+      "system": "System",
+      "fr": "Français",
+      "en": "English"
+    }
+  },
+
+  "stats": {
+    "title": "Statistics",
+    "subtitle": "Your weekly report and eye health progress.",
+    "week_activity": "Weekly Activity",
+    "today": "Today",
+    "pauses": "BREAKS",
+    "focus_score": "FOCUS SCORE",
+    "week_pauses": "WEEK BREAKS",
+    "streak_title": "Current Streak",
+    "streak_day": "%d day",
+    "streak_days": "%d days",
+    "streak_sub": "consecutive",
+    "streak_sub_plural": "consecutive",
+    "vitality_title": "Vitality Score",
+    "vitality_unit": "breaks observed",
+    "analysis_title": "Analysis",
+    "day_abbr": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    "export_pdf": "⬇  Export PDF",
+    "export_dialog_title": "Export PDF Report",
+    "export_filename": "eyecare-report-%s.pdf",
+    "export_filter": "PDF Files",
+    "export_csv": "⬇  Export CSV",
+    "export_csv_dialog": "Export CSV Data",
+    "export_csv_filename": "eyecare-data-%s.csv",
+    "export_csv_filter": "CSV Files",
+    "date_format": "MM/dd",
+    "best_streak": "Record: %d day(s)",
+    "view": { "week": "Week", "month": "4 weeks" }
+  },
+
+  "tray": {
+    "open": "Open",
+    "start_break": "Start break now",
+    "skip_cycle": "Skip Break",
+    "pause": "⏸  Pause",
+    "resume": "▶  Resume",
+    "quit": "Quit",
+    "tooltip": {
+      "work": "Eyecare — Next reminder in %s",
+      "awaiting": "Eyecare — Click to start your break!",
+      "break": "Eyecare — Break in progress...",
+      "awaiting_activity": "Eyecare — Move your mouse to restart the cycle",
+      "default": "Eyecare 20-20-20"
+    }
+  },
+
+  "notif": {
+    "app_name": "Eyecare 20-20-20",
+    "work_done": "Break time! Look at something 6m away for %d seconds.",
+    "break_done": "Break over. The %d-minute cycle restarts.",
+    "reminder": "Don't forget your break! Click the icon to start the countdown.",
+    "streak_record": "New record: %d consecutive day(s)!"
+  },
+
+  "overlay": {
+    "title": "Time to rest your eyes",
+    "subtitle": "Look at something 6 metres away",
+    "esc_hint": "Press Esc to dismiss",
+    "penalty": "+%d sec (overdue catch-up)"
+  },
+
+  "audio": { "default_sound": "Beep (default)" },
+
+  "analysis": {
+    "excellent": "Excellent! Your eyes thank you. Keep it up — your vision will benefit long-term.",
+    "good": "Good work. A few breaks were missed, but you're on the right track to protect your vision.",
+    "average": "Average results. Try to honour more breaks to reduce eye strain.",
+    "poor": "Needs improvement. Your eye health needs more attention — regular breaks make a difference.",
+    "none": "No data this week. Start a work cycle to begin tracking your progress."
+  },
+
+  "window": { "title": "Eyecare 20-20-20" },
+
+  "pdf": {
+    "title": "Eyecare 20-20-20 - Weekly Report",
+    "week_range": "Week of %s to %s",
+    "date_format": "MM/dd/yyyy",
+    "section": {
+      "summary": "Summary",
+      "daily": "Daily Detail",
+      "analysis": "Analysis"
+    },
+    "breaks_completed": "Breaks completed: %d / %d",
+    "vitality": "Vitality Score: %.0f%%",
+    "streak": "Current streak: %d day(s)",
+    "header": {
+      "day": "Day",
+      "breaks": "Breaks",
+      "target": "Target",
+      "focus": "Focus Score"
+    },
+    "day": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+  }
+}

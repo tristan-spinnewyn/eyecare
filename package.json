@@ -1,0 +1,39 @@
+{
+  "name": "eyecare-20-20-20",
+  "version": "0.1.0",
+  "description": "Eyecare 20-20-20 — réduisez la fatigue oculaire en suivant la règle des 20-20-20",
+  "main": "src/main/main.js",
+  "author": "Tristan Spinnewyn",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "devDependencies": {
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.eyecare.app",
+    "productName": "Eyecare 20-20-20",
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "locales/**/*"
+    ],
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.healthcare-fitness"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Utility"
+    }
+  }
+}

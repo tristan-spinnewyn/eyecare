@@ -1,0 +1,64 @@
+@import url("../theme.css");
+
+html, body {
+  background: transparent;
+  overflow: hidden;
+}
+
+.overlay-root {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  background: rgba(5, 7, 15, 0.92);
+}
+
+.overlay-title {
+  margin: 0;
+  color: #E8EAF0;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.ring-wrap {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring-wrap canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.overlay-countdown {
+  position: relative;
+  color: #60A5FA;
+  font-size: 96px;
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+}
+
+.overlay-instruction {
+  margin: 0;
+  color: #9CA3AF;
+  font-size: 18px;
+}
+
+.overlay-penalty {
+  margin: 0;
+  color: #FBBF24;
+  font-size: 14px;
+}
+
+.overlay-esc-hint {
+  margin: 0;
+  color: #4B5563;
+  font-size: 12px;
+}

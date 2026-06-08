@@ -1,0 +1,193 @@
+{
+  "nav": {
+    "dashboard": "Tableau de bord",
+    "stats": "Statistiques",
+    "settings": "Paramètres"
+  },
+  "brand": { "tagline": "SANTÉ VISUELLE" },
+
+  "dashboard": {
+    "status": { "label": "Statut Eyecare" },
+    "title": "Votre santé visuelle",
+    "subtitle": "Prenez un moment pour laisser vos yeux vagabonder. La règle 20-20-20 réduit la fatigue numérique.",
+    "btn": {
+      "start_break": "▶  Lancer la pause",
+      "skip_cycle": "Ignorer la pause",
+      "pause": "⏸  Pause",
+      "reset": "↺  Réinitialiser"
+    },
+    "pro_tip": "Conseil",
+    "pauses_today": "PAUSES AUJOURD’HUI",
+    "focus_score": "SCORE DE FOCUS",
+    "ambient_title": "Lumière ambiante",
+    "ambient_text": "Ajustez la luminosité de votre écran pour qu’elle corresponde à l’éclairage ambiant."
+  },
+  "warning": { "tray": "Menu système non disponible. Sur GNOME, installez l’extension « AppIndicator and KStatusNotifierItem Support »." },
+
+  "timer": {
+    "until_break": "JUSQU’À LA PAUSE",
+    "start_break": "LANCEZ VOTRE PAUSE",
+    "eyes_resting": "YEUX AU REPOS",
+    "paused": "MINUTEUR EN PAUSE",
+    "awaiting_activity": "BOUGEZ POUR REPRENDRE",
+    "ready": "PRÊT"
+  },
+
+  "status": {
+    "active": "ACTIF",
+    "break_time": "PAUSE !",
+    "on_break": "EN PAUSE",
+    "paused": "EN PAUSE",
+    "awaiting_activity": "EN ATTENTE",
+    "ready": "PRÊT"
+  },
+
+  "tip": [
+    "Palming : frottez vos mains pour les réchauffer, puis couvrez doucement vos yeux fermés pendant 20 secondes.",
+    "Clignez consciemment : on cligne environ 15×/min, mais seulement 5×/min devant un écran.",
+    "Règle 20-20-20 : toutes les 20 minutes, regardez à 6 mètres pendant 20 secondes.",
+    "Ajustez la luminosité de votre écran pour qu’elle corresponde à l’éclairage ambiant.",
+    "Positionnez votre écran légèrement en dessous du niveau des yeux pour réduire la fatigue."
+  ],
+
+  "settings": {
+    "title": "Paramètres",
+    "subtitle": "Configurez votre espace pour une santé oculaire optimale.",
+    "section": {
+      "time": "Intervalles de temps",
+      "audio": "Notifications Audio",
+      "advanced": "Modes Avancés",
+      "language": "Langue"
+    },
+    "work_duration": "Durée de travail",
+    "work_desc": "Temps de concentration avant la pause",
+    "break_duration": "Durée de pause",
+    "break_desc": "Durée de la règle des 20-20-20",
+    "alert_sound": "Son d’alerte",
+    "sound_preview": "Aperçu sonore",
+    "strict": "Mode Strict",
+    "strict_desc": "Bloque l’écran pendant les pauses",
+    "system_theme": "Thème système",
+    "system_theme_desc": "Suit automatiquement le mode clair/sombre de l’OS",
+    "dark_theme": "Thème sombre",
+    "dark_theme_desc": "Interface en mode nuit",
+    "break_done_sound": "Son de fin de pause",
+    "autostart": "Démarrage automatique",
+    "autostart_desc": "Lancer au démarrage du système",
+    "language_label": "Langue de l’interface",
+    "btn": {
+      "reset": "Réinitialiser par défaut",
+      "cancel": "Annuler",
+      "save": "Sauvegarder les modifications"
+    },
+    "feedback": {
+      "reset": "Valeurs par défaut restaurées. Cliquez sur Sauvegarder pour confirmer.",
+      "autostart_error": "Démarrage auto : %s"
+    },
+    "unit": {
+      "min": "%d min",
+      "sec": "%d sec",
+      "percent": "%d%%"
+    },
+    "volume": "Volume",
+    "lang": {
+      "system": "Système",
+      "fr": "Français",
+      "en": "English"
+    }
+  },
+
+  "stats": {
+    "title": "Statistiques",
+    "subtitle": "Votre bilan hebdomadaire et vos progrès en santé oculaire.",
+    "week_activity": "Activité de la semaine",
+    "today": "Aujourd’hui",
+    "pauses": "PAUSES",
+    "focus_score": "SCORE FOCUS",
+    "week_pauses": "PAUSES SEMAINE",
+    "streak_title": "Série en cours",
+    "streak_day": "%d jour",
+    "streak_days": "%d jours",
+    "streak_sub": "consécutif",
+    "streak_sub_plural": "consécutifs",
+    "vitality_title": "Score Vitalité",
+    "vitality_unit": "pauses respectées",
+    "analysis_title": "Analyse",
+    "day_abbr": ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
+    "export_pdf": "⬇  Exporter PDF",
+    "export_dialog_title": "Exporter le rapport PDF",
+    "export_filename": "eyecare-rapport-%s.pdf",
+    "export_filter": "Fichiers PDF",
+    "export_csv": "⬇  Exporter CSV",
+    "export_csv_dialog": "Exporter les données CSV",
+    "export_csv_filename": "eyecare-donnees-%s.csv",
+    "export_csv_filter": "Fichiers CSV",
+    "date_format": "dd/MM",
+    "best_streak": "Record : %d jour(s)",
+    "view": { "week": "Semaine", "month": "4 semaines" }
+  },
+
+  "tray": {
+    "open": "Ouvrir",
+    "start_break": "Lancer la pause maintenant",
+    "skip_cycle": "Ignorer la pause",
+    "pause": "⏸  Pause",
+    "resume": "▶  Reprendre",
+    "quit": "Quitter",
+    "tooltip": {
+      "work": "Eyecare — Prochain rappel dans %s",
+      "awaiting": "Eyecare — Cliquez pour lancer la pause !",
+      "break": "Eyecare — Pause en cours...",
+      "awaiting_activity": "Eyecare — Bougez la souris pour relancer le cycle",
+      "default": "Eyecare 20-20-20"
+    }
+  },
+
+  "notif": {
+    "app_name": "Eyecare 20-20-20",
+    "work_done": "Temps de pause ! Regardez à 6 m pendant %d secondes.",
+    "break_done": "Pause terminée. Le cycle de %d minutes redémarre.",
+    "reminder": "N’oubliez pas votre pause ! Cliquez sur l’icône pour lancer le compte à rebours.",
+    "streak_record": "Nouveau record : %d jour(s) consécutifs !"
+  },
+
+  "overlay": {
+    "title": "Temps de reposer vos yeux",
+    "subtitle": "Regardez à 6 mètres",
+    "esc_hint": "Appuyez sur Échap pour ignorer",
+    "penalty": "+%d sec (retard rattrapé)"
+  },
+
+  "audio": { "default_sound": "Bip (défaut)" },
+
+  "analysis": {
+    "excellent": "Excellent ! Vos yeux vous remercient. Continuez sur cette lancée, votre vision en bénéficiera à long terme.",
+    "good": "Bon travail. Quelques pauses ont été manquées, mais vous êtes sur la bonne voie pour protéger votre vision.",
+    "average": "Résultats moyens. Essayez d’honorer plus de pauses pour réduire la fatigue oculaire.",
+    "poor": "À améliorer. Votre santé oculaire nécessite davantage d’attention — des pauses régulières font la différence.",
+    "none": "Aucune donnée cette semaine. Lancez un cycle de travail pour commencer à suivre vos progrès."
+  },
+
+  "window": { "title": "Eyecare 20-20-20" },
+
+  "pdf": {
+    "title": "Eyecare 20-20-20 - Rapport Hebdomadaire",
+    "week_range": "Semaine du %s au %s",
+    "date_format": "dd/MM/yyyy",
+    "section": {
+      "summary": "Résumé",
+      "daily": "Détail journalier",
+      "analysis": "Analyse"
+    },
+    "breaks_completed": "Pauses complétées : %d / %d",
+    "vitality": "Score Vitalité : %.0f%%",
+    "streak": "Série en cours : %d jour(s)",
+    "header": {
+      "day": "Jour",
+      "breaks": "Pauses",
+      "target": "Cible",
+      "focus": "Score Focus"
+    },
+    "day": ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]
+  }
+}

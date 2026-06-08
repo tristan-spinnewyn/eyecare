@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'">
+  <title>Eyecare — Overlay</title>
+  <link rel="stylesheet" href="overlay.css">
+</head>
+<body>
+  <div class="overlay-root">
+    <h1 class="overlay-title" data-i18n="overlay.title"></h1>
+    <div class="ring-wrap">
+      <canvas id="ring" width="300" height="300"></canvas>
+      <div class="overlay-countdown" id="countdown">0:00</div>
+    </div>
+    <p class="overlay-instruction" data-i18n="overlay.subtitle"></p>
+    <p class="overlay-penalty" id="penalty" hidden></p>
+    <p class="overlay-esc-hint" id="escHint" data-i18n="overlay.esc_hint" hidden></p>
+  </div>
+  <script src="overlay.js"></script>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'">
+  <title>Eyecare 20-20-20</title>
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <div class="app-root">
+    <nav class="sidebar">
+      <div class="sidebar-brand">
+        <span class="brand-name">Eyecare</span>
+        <span class="brand-tagline">20-20-20</span>
+      </div>
+      <div class="nav-menu">
+        <button class="nav-item active" data-view="dashboard" data-i18n="nav.dashboard"></button>
+        <button class="nav-item" data-view="stats" data-i18n="nav.stats"></button>
+        <button class="nav-item" data-view="settings" data-i18n="nav.settings"></button>
+      </div>
+    </nav>
+
+    <main class="content-area">
+
+      <!-- ============================= Dashboard ============================= -->
+      <section class="view active" id="view-dashboard">
+        <div class="page-header">
+          <div class="status-row">
+            <span class="status-label" data-i18n="dashboard.status.label"></span>
+            <span class="status-badge" id="statusBadge"></span>
+          </div>
+          <h1 class="page-title" data-i18n="dashboard.title"></h1>
+          <p class="page-subtitle" data-i18n="dashboard.subtitle"></p>
+        </div>
+        <div class="dashboard-body">
+          <div class="dashboard-main">
+            <div class="card timer-card">
+              <div class="ring-wrap">
+                <canvas id="timerRing" width="240" height="240"></canvas>
+                <div class="timer-center">
+                  <span class="timer-countdown" id="timerCountdown">20:00</span>
+                  <span class="timer-subtitle" id="timerSubtitle"></span>
+                </div>
+              </div>
+              <div class="timer-actions">
+                <button class="btn-primary" id="btnStartBreak" data-i18n="dashboard.btn.start_break"></button>
+                <button class="btn-secondary" id="btnSkipCycle" data-i18n="dashboard.btn.skip_cycle"></button>
+              </div>
+              <div class="timer-actions">
+                <button class="btn-pause" id="btnPauseResume" data-i18n="dashboard.btn.pause"></button>
+                <button class="btn-secondary" id="btnReset" data-i18n="dashboard.btn.reset"></button>
+              </div>
+            </div>
+          </div>
+          <div class="dashboard-side">
+            <div class="card stat-card">
+              <span class="stat-value" id="pausesTodayValue">0 / 0</span>
+              <span class="stat-label" data-i18n="dashboard.pauses_today"></span>
+            </div>
+            <div class="card stat-card">
+              <span class="stat-value" id="focusScoreValue">0%</span>
+              <span class="stat-label" data-i18n="dashboard.focus_score"></span>
+            </div>
+            <div class="card stat-card ambient-card">
+              <span class="ambient-title" data-i18n="dashboard.ambient_title"></span>
+              <p class="ambient-text" data-i18n="dashboard.ambient_text"></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================== Stats ================================ -->
+      <section class="view" id="view-stats">
+        <div class="page-header">
+          <h1 class="page-title" data-i18n="stats.title"></h1>
+          <p class="page-subtitle" data-i18n="stats.subtitle"></p>
+        </div>
+        <div class="stats-body">
+          <div class="stats-main">
+            <div class="card chart-card">
+              <div class="chart-card-header">
+                <span class="section-title" data-i18n="stats.week_activity"></span>
+                <button class="btn-icon active" id="weekViewBtn" data-i18n="stats.view.week"></button>
+                <button class="btn-icon" id="monthViewBtn" data-i18n="stats.view.month"></button>
+                <button class="btn-icon" id="prevWeekBtn">&lsaquo;</button>
+                <span class="week-range" id="weekRangeLabel"></span>
+                <button class="btn-icon" id="nextWeekBtn">&rsaquo;</button>
+              </div>
+              <div class="bar-chart" id="barChart"></div>
+            </div>
+            <div class="card today-card">
+              <span class="section-title" data-i18n="stats.today"></span>
+              <div class="today-stats">
+                <div class="today-stat">
+                  <span class="stat-value" id="todayBreaksValue">0 / 0</span>
+                  <span class="stat-label" data-i18n="stats.pauses"></span>
+                </div>
+                <div class="today-stat">
+                  <span class="stat-value" id="todayFocusValue">0%</span>
+                  <span class="stat-label" data-i18n="stats.focus_score"></span>
+                </div>
+                <div class="today-stat">
+                  <span class="stat-value" id="weekTotalValue">0</span>
+                  <span class="stat-label" data-i18n="stats.week_pauses"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="stats-side">
+            <div class="card streak-card">
+              <span class="section-title" data-i18n="stats.streak_title"></span>
+              <div class="streak-row">
+                <span class="streak-icon">🔥</span>
+                <span class="streak-value" id="streakValue">0</span>
+              </div>
+              <span class="setting-desc" id="streakSubLabel"></span>
+              <span class="setting-desc" id="bestStreakLabel"></span>
+            </div>
+            <div class="card vitality-card">
+              <span class="section-title" data-i18n="stats.vitality_title"></span>
+              <span class="vitality-value" id="vitalityValue">0%</span>
+              <span class="setting-desc" data-i18n="stats.vitality_unit"></span>
+            </div>
+            <div class="card analysis-card">
+              <span class="section-title" data-i18n="stats.analysis_title"></span>
+              <p class="analysis-text" id="analysisText"></p>
+            </div>
+          </div>
+        </div>
+        <div class="stats-footer">
+          <span class="spinner" id="exportSpinner" hidden></span>
+          <button class="btn-secondary" id="exportCsvBtn" data-i18n="stats.export_csv"></button>
+          <button class="btn-export" id="exportPdfBtn" data-i18n="stats.export_pdf"></button>
+        </div>
+      </section>
+
+      <!-- ============================= Settings ============================== -->
+      <section class="view" id="view-settings">
+        <div class="page-header">
+          <h1 class="page-title" data-i18n="settings.title"></h1>
+          <p class="page-subtitle" data-i18n="settings.subtitle"></p>
+        </div>
+        <div class="settings-body">
+
+          <div class="settings-section">
+            <span class="section-title" data-i18n="settings.section.time"></span>
+            <div class="card settings-card">
+              <div class="settings-row">
+                <div class="settings-row-header">
+                  <span class="setting-name" data-i18n="settings.work_duration"></span>
+                  <span class="setting-value-badge" id="workValueLabel"></span>
+                </div>
+                <p class="setting-desc" data-i18n="settings.work_desc"></p>
+                <input type="range" id="workSlider" min="1" max="60" step="1">
+              </div>
+              <hr class="settings-separator">
+              <div class="settings-row">
+                <div class="settings-row-header">
+                  <span class="setting-name" data-i18n="settings.break_duration"></span>
+                  <span class="setting-value-badge" id="breakValueLabel"></span>
+                </div>
+                <p class="setting-desc" data-i18n="settings.break_desc"></p>
+                <input type="range" id="breakSlider" min="5" max="120" step="5">
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-columns">
+            <div class="card settings-card">
+              <span class="section-title" data-i18n="settings.section.audio"></span>
+              <div class="settings-row">
+                <span class="setting-desc" data-i18n="settings.alert_sound"></span>
+                <select id="soundSelect"></select>
+              </div>
+              <div class="settings-row-header">
+                <span class="setting-desc" data-i18n="settings.sound_preview"></span>
+                <button class="btn-icon" id="previewSoundBtn">&#9654;</button>
+              </div>
+              <hr class="settings-separator">
+              <div class="settings-row">
+                <span class="setting-desc" data-i18n="settings.break_done_sound"></span>
+                <select id="breakSoundSelect"></select>
+              </div>
+              <div class="settings-row-header">
+                <span class="setting-desc" data-i18n="settings.sound_preview"></span>
+                <button class="btn-icon" id="previewBreakSoundBtn">&#9654;</button>
+              </div>
+              <hr class="settings-separator">
+              <div class="settings-row">
+                <div class="settings-row-header">
+                  <span class="setting-name" data-i18n="settings.volume"></span>
+                  <span class="setting-value-badge" id="volumeValueLabel"></span>
+                </div>
+                <input type="range" id="volumeSlider" min="0" max="100" step="5">
+              </div>
+            </div>
+
+            <div class="card settings-card">
+              <span class="section-title" data-i18n="settings.section.advanced"></span>
+              <div class="toggle-row">
+                <div class="toggle-text">
+                  <span class="setting-name" data-i18n="settings.strict"></span>
+                  <span class="setting-desc" data-i18n="settings.strict_desc"></span>
+                </div>
+                <label class="toggle-switch"><input type="checkbox" id="strictToggle"><span class="toggle-slider"></span></label>
+              </div>
+              <div class="toggle-row">
+                <div class="toggle-text">
+                  <span class="setting-name" data-i18n="settings.system_theme"></span>
+                  <span class="setting-desc" data-i18n="settings.system_theme_desc"></span>
+                </div>
+                <label class="toggle-switch"><input type="checkbox" id="systemThemeToggle"><span class="toggle-slider"></span></label>
+              </div>
+              <div class="toggle-row" id="darkThemeRow">
+                <div class="toggle-text">
+                  <span class="setting-name" data-i18n="settings.dark_theme"></span>
+                  <span class="setting-desc" data-i18n="settings.dark_theme_desc"></span>
+                </div>
+                <label class="toggle-switch"><input type="checkbox" id="darkThemeToggle"><span class="toggle-slider"></span></label>
+              </div>
+              <div class="toggle-row">
+                <div class="toggle-text">
+                  <span class="setting-name" data-i18n="settings.autostart"></span>
+                  <span class="setting-desc" data-i18n="settings.autostart_desc"></span>
+                </div>
+                <label class="toggle-switch"><input type="checkbox" id="autostartToggle"><span class="toggle-slider"></span></label>
+              </div>
+            </div>
+          </div>
+
+          <div class="card settings-card">
+            <span class="section-title" data-i18n="settings.section.language"></span>
+            <div class="settings-row">
+              <span class="setting-desc" data-i18n="settings.language_label"></span>
+              <select id="languageSelect"></select>
+            </div>
+          </div>
+
+          <p class="feedback-label" id="feedbackLabel"></p>
+
+          <div class="settings-footer">
+            <button class="btn-reset" id="resetSettingsBtn" data-i18n="settings.btn.reset"></button>
+            <span class="spacer"></span>
+            <button class="btn-secondary" id="cancelSettingsBtn" data-i18n="settings.btn.cancel"></button>
+            <button class="btn-primary" id="saveSettingsBtn" data-i18n="settings.btn.save"></button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="../audioPlayer.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
