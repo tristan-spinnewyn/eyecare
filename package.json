@@ -16,7 +16,8 @@
     "dist:dir": "electron-builder --dir",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "release": "node scripts/release.js"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^5.0.4",
