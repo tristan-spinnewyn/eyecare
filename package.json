@@ -5,13 +5,24 @@
   "main": "src/main/main.js",
   "author": "Tristan Spinnewyn",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tristan-spinnewyn/eyecare.git"
+  },
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder"
+    "build": "electron-builder",
+    "dist": "electron-builder",
+    "dist:dir": "electron-builder --dir",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "devDependencies": {
-    "electron": "^31.7.7",
-    "electron-builder": "^24.13.3"
+    "@vitest/coverage-v8": "^5.0.4",
+    "electron": "^44.7.1",
+    "electron-builder": "^26.15.3",
+    "vitest": "^5.0.4"
   },
   "build": {
     "appId": "com.eyecare.app",
@@ -26,13 +37,15 @@
       "category": "public.app-category.healthcare-fitness"
     },
     "win": {
-      "target": "nsis"
+      "target": "nsis",
+      "artifactName": "Eyecare-20-20-20-Setup-${version}.${ext}"
     },
     "linux": {
       "target": [
         "AppImage",
         "deb"
       ],
+      "artifactName": "Eyecare-20-20-20-${version}.${ext}",
       "category": "Utility"
     }
   }
