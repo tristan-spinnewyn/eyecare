@@ -54,6 +54,7 @@ function getLatestReleaseTag(cwd = process.cwd()) {
       cwd,
       encoding: 'utf-8',
       stdio: ['ignore', 'pipe', 'ignore'],
+      timeout: 2000,
     }).trim();
     if (out) return out;
   } catch {
@@ -66,6 +67,7 @@ function getLatestReleaseTag(cwd = process.cwd()) {
       cwd,
       encoding: 'utf-8',
       stdio: ['ignore', 'pipe', 'ignore'],
+      timeout: 1000,
     }).trim();
     if (tag) return tag;
   } catch {

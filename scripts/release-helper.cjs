@@ -53,16 +53,21 @@ function semverBump(versionStr, type = 'patch') {
  * @param {string} cwd
  * @returns {string|null}
  */
-function getLatestReleaseTag(cwd = process.cwd()) {
+function getLatestReleaseTag(cwd = process.cwd(), fallbackTag = null) {
+  if (fallbackTag !== null && fallbackTag !== undefined) {
+    return fallbackTag;
+  }
+
   try {
     const out = execSync('gh release view --json tagName -q .tagName', {
       cwd,
       encoding: 'utf-8',
       stdio: ['ignore', 'pipe', 'ignore'],
+      timeout: 2000,
     }).trim();
     if (out) return out;
   } catch {
-    // Aucune release distante ou gh indisponible
+    // Aucune release distante ou gh indisponible / timeout
   }
 
   try {
@@ -70,6 +75,7 @@ function getLatestReleaseTag(cwd = process.cwd()) {
       cwd,
       encoding: 'utf-8',
       stdio: ['ignore', 'pipe', 'ignore'],
+      timeout: 1000,
     }).trim();
     if (tag) return tag;
   } catch {
@@ -115,18 +121,21 @@ function updatePackageFiles(rootDir, targetVersion) {
  * @param {object} env
  * @returns {{ cleanVersion: string, tagName: string, latestRelease: string, baseVersion: string }}
  */
-function determineReleaseInfo(rootDir = process.cwd(), env = process.env) {
+function determineReleaseInfo(rootDir = process.cwd(), env = process.env, latestReleaseOverride = null) {
   const pkgPath = path.join(rootDir, 'package.json');
   const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
   const currentPkgVersion = pkg.version || '0.1.0';
-
-  const latestRelease = getLatestReleaseTag(rootDir);
-  const baseVersion = latestRelease ? cleanVersion(latestRelease) : currentPkgVersion;
 
   const rawInput = (env.INPUT_TAG || env.INPUT_CUSTOM || env.CUSTOM_VERSION || '').trim();
   const bumpType = (env.INPUT_BUMP || 'patch').trim().toLowerCase();
   const refType = env.REF_TYPE || '';
   const refName = env.REF_NAME || '';
+
+  let latestRelease = latestReleaseOverride || env.LATEST_RELEASE || null;
+  if (latestRelease === null) {
+    latestRelease = getLatestReleaseTag(rootDir);
+  }
+  const baseVersion = latestRelease ? cleanVersion(latestRelease) : currentPkgVersion;
 
   let clean = '';
   if (rawInput) {

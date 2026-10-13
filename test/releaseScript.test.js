@@ -65,7 +65,7 @@ describe('Release script helpers', () => {
       const pkg = { name: 'test-app', version: '0.1.0' };
       fs.writeFileSync(path.join(tmpDir, 'package.json'), JSON.stringify(pkg, null, 2));
 
-      const info = determineReleaseInfo(tmpDir, { INPUT_TAG: 'v2.3.4' });
+      const info = determineReleaseInfo(tmpDir, { INPUT_TAG: 'v2.3.4' }, '');
       expect(info.cleanVersion).toBe('2.3.4');
       expect(info.tagName).toBe('v2.3.4');
     });
@@ -74,7 +74,7 @@ describe('Release script helpers', () => {
       const pkg = { name: 'test-app', version: '0.1.0' };
       fs.writeFileSync(path.join(tmpDir, 'package.json'), JSON.stringify(pkg, null, 2));
 
-      const info = determineReleaseInfo(tmpDir, { REF_TYPE: 'tag', REF_NAME: 'v3.0.1' });
+      const info = determineReleaseInfo(tmpDir, { REF_TYPE: 'tag', REF_NAME: 'v3.0.1' }, '');
       expect(info.cleanVersion).toBe('3.0.1');
       expect(info.tagName).toBe('v3.0.1');
     });
@@ -83,13 +83,13 @@ describe('Release script helpers', () => {
       const pkg = { name: 'test-app', version: '1.2.0' };
       fs.writeFileSync(path.join(tmpDir, 'package.json'), JSON.stringify(pkg, null, 2));
 
-      const infoMinor = determineReleaseInfo(tmpDir, { INPUT_BUMP: 'minor' });
+      const infoMinor = determineReleaseInfo(tmpDir, { INPUT_BUMP: 'minor' }, '');
       expect(infoMinor.cleanVersion).toBe('1.3.0');
 
-      const infoMajor = determineReleaseInfo(tmpDir, { INPUT_BUMP: 'major' });
+      const infoMajor = determineReleaseInfo(tmpDir, { INPUT_BUMP: 'major' }, '');
       expect(infoMajor.cleanVersion).toBe('2.0.0');
 
-      const infoPatch = determineReleaseInfo(tmpDir, { INPUT_BUMP: 'patch' });
+      const infoPatch = determineReleaseInfo(tmpDir, { INPUT_BUMP: 'patch' }, '');
       expect(infoPatch.cleanVersion).toBe('1.2.1');
     });
   });
