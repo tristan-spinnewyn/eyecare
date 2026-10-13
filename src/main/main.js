@@ -1,5 +1,6 @@
 'use strict';
 
+const fs = require('fs');
 const path = require('path');
 const { app, BrowserWindow, ipcMain, dialog, nativeTheme } = require('electron');
 
@@ -17,6 +18,7 @@ const { OverlayManager } = require('./overlayManager');
 const ROOT_DIR = path.join(__dirname, '..', '..');
 const LOCALES_DIR = path.join(ROOT_DIR, 'locales');
 const SOUNDS_DIR = path.join(ROOT_DIR, 'assets', 'sounds');
+const ICON_PATH = path.join(ROOT_DIR, 'assets', 'icon.png');
 const PRELOAD_PATH = path.join(__dirname, '..', 'preload', 'preload.js');
 const MAIN_HTML = path.join(__dirname, '..', 'renderer', 'views', 'index.html');
 const OVERLAY_HTML = path.join(__dirname, '..', 'renderer', 'views', 'overlay.html');
@@ -64,6 +66,7 @@ function createMainWindow() {
     minWidth: 860,
     minHeight: 600,
     show: false,
+    icon: fs.existsSync(ICON_PATH) ? ICON_PATH : undefined,
     backgroundColor: effectiveDarkTheme() ? '#0F1117' : '#F0F2F7',
     webPreferences: {
       preload: PRELOAD_PATH,
@@ -74,7 +77,7 @@ function createMainWindow() {
   mainWindow.once('ready-to-show', () => mainWindow.show());
 
   mainWindow.on('close', (event) => {
-    if (!isQuitting) {
+    if (!isQuitting && trayManager && trayManager.tray) {
       event.preventDefault();
       mainWindow.hide();
     }
@@ -278,8 +281,12 @@ app.whenReady().then(() => {
 
   createMainWindow();
 
-  trayManager = new TrayManager(timerService, i18n, () => showMainWindow(), () => app.quit());
-  trayManager.initialize();
+  try {
+    trayManager = new TrayManager(timerService, i18n, () => showMainWindow(), () => app.quit());
+    trayManager.initialize();
+  } catch (e) {
+    console.warn('[TrayManager] Tray initialization failed (common on Linux without AppIndicator):', e);
+  }
 
   nativeTheme.on('updated', () => {
     if (settingsService.getSettings().systemTheme) broadcastTheme();
@@ -292,7 +299,10 @@ app.whenReady().then(() => {
 });
 
 app.on('window-all-closed', () => {
-  // Eyecare keeps running from the tray — only `Quit` from the tray menu exits.
+  // If tray is unavailable (e.g. Linux GNOME without AppIndicator extension), quit on window close
+  if (!trayManager || !trayManager.tray) {
+    app.quit();
+  }
 });
 
 app.on('before-quit', () => {
