@@ -110,6 +110,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
 
     steps:
       - name: Check out repository
@@ -162,7 +163,16 @@ jobs:
             git add package.json package-lock.json
             git commit -m "chore(release): bump version to ${TARGET_VERSION} [skip ci]"
             git pull --rebase origin "$TARGET_BRANCH" || true
-            git push origin "HEAD:$TARGET_BRANCH" || echo "Warning: Direct push to protected $TARGET_BRANCH blocked by rule, release tag and assets are still published."
+            if ! git push origin "HEAD:$TARGET_BRANCH"; then
+              echo "Direct push to protected $TARGET_BRANCH blocked by rule. Creating PR..."
+              BUMP_BRANCH="chore/bump-version-${TARGET_VERSION}"
+              git checkout -b "$BUMP_BRANCH"
+              git push -u origin "$BUMP_BRANCH" --force
+              gh pr create --base "$TARGET_BRANCH" --head "$BUMP_BRANCH" \
+                --title "chore(release): bump version to ${TARGET_VERSION}" \
+                --body "Automated version bump in package.json & package-lock.json following release v${TARGET_VERSION}." || true
+              gh pr merge "$BUMP_BRANCH" --auto --squash || true
+            fi
             echo "Version bump processed for $TARGET_BRANCH"
           fi
 
