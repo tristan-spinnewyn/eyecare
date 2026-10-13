@@ -13,7 +13,11 @@ describe('Release script helpers', () => {
   });
 
   afterEach(() => {
-    fs.rmSync(tmpDir, { recursive: true, force: true });
+    try {
+      fs.rmSync(tmpDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
+    } catch {
+      // Ignore Windows temp lock
+    }
   });
 
   it('cleans version string by removing v and whitespace', () => {
