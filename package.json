@@ -15,6 +15,7 @@
     "dist": "electron-builder",
     "dist:dir": "electron-builder --dir",
     "make:icon": "node scripts/make-icon.cjs",
+    "predist": "node scripts/make-icon.cjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
@@ -30,7 +31,8 @@
     "appId": "com.eyecare.app",
     "productName": "Eyecare 20-20-20",
     "directories": {
-      "buildResources": "build"
+      "buildResources": "build",
+      "output": "dist"
     },
     "files": [
       "src/**/*",
