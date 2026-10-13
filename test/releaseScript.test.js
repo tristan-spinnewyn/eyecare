@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import os from 'os';
 import { cleanVersion, semverBump, updatePackageFiles } from '../scripts/release.js';
+import { determineReleaseInfo } from '../scripts/release-helper.cjs';
 
 describe('Release script helpers', () => {
   let tmpDir;
@@ -57,5 +58,39 @@ describe('Release script helpers', () => {
 
   it('throws on invalid target version', () => {
     expect(() => updatePackageFiles(tmpDir, '')).toThrow(/Version invalide/);
+  });
+
+  describe('determineReleaseInfo', () => {
+    it('uses INPUT_TAG when provided', () => {
+      const pkg = { name: 'test-app', version: '0.1.0' };
+      fs.writeFileSync(path.join(tmpDir, 'package.json'), JSON.stringify(pkg, null, 2));
+
+      const info = determineReleaseInfo(tmpDir, { INPUT_TAG: 'v2.3.4' });
+      expect(info.cleanVersion).toBe('2.3.4');
+      expect(info.tagName).toBe('v2.3.4');
+    });
+
+    it('uses ref tag name when refType is tag', () => {
+      const pkg = { name: 'test-app', version: '0.1.0' };
+      fs.writeFileSync(path.join(tmpDir, 'package.json'), JSON.stringify(pkg, null, 2));
+
+      const info = determineReleaseInfo(tmpDir, { REF_TYPE: 'tag', REF_NAME: 'v3.0.1' });
+      expect(info.cleanVersion).toBe('3.0.1');
+      expect(info.tagName).toBe('v3.0.1');
+    });
+
+    it('bumps version based on INPUT_BUMP when no tag is given', () => {
+      const pkg = { name: 'test-app', version: '1.2.0' };
+      fs.writeFileSync(path.join(tmpDir, 'package.json'), JSON.stringify(pkg, null, 2));
+
+      const infoMinor = determineReleaseInfo(tmpDir, { INPUT_BUMP: 'minor' });
+      expect(infoMinor.cleanVersion).toBe('1.3.0');
+
+      const infoMajor = determineReleaseInfo(tmpDir, { INPUT_BUMP: 'major' });
+      expect(infoMajor.cleanVersion).toBe('2.0.0');
+
+      const infoPatch = determineReleaseInfo(tmpDir, { INPUT_BUMP: 'patch' });
+      expect(infoPatch.cleanVersion).toBe('1.2.1');
+    });
   });
 });

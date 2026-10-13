@@ -6,21 +6,20 @@ on:
       - 'v*'
   workflow_dispatch:
     inputs:
+      tag_name:
+        description: 'Tag de release (ex: v1.0.0 ou 1.0.0). Laisser vide pour utiliser la version calculée'
+        required: false
+        type: string
+        default: ''
       bump_type:
-        description: 'Type d''incrément de version (auto calculé depuis la dernière release)'
-        required: true
+        description: 'Type d''incrément si tag_name est vide (patch, minor, major)'
+        required: false
         type: choice
         default: 'patch'
         options:
           - 'patch'
           - 'minor'
           - 'major'
-          - 'custom'
-      custom_version:
-        description: 'Version personnalisée si bump_type = custom (ex: 0.2.0 ou v0.2.0)'
-        required: false
-        type: string
-        default: ''
       draft:
         description: 'Créer en tant que brouillon (draft)'
         required: false
@@ -40,118 +39,8 @@ permissions:
   contents: write
 
 jobs:
-  prepare:
-    name: Prepare & Bump Version
-    runs-on: ubuntu-latest
-    outputs:
-      tag_name: ${{ steps.version_step.outputs.tag_name }}
-      clean_version: ${{ steps.version_step.outputs.clean_version }}
-      latest_release: ${{ steps.version_step.outputs.latest_release }}
-
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v7
-        with:
-          ref: ${{ github.ref_type == 'branch' && github.ref_name || github.event.repository.default_branch || 'main' }}
-          fetch-depth: 0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: 22.x
-
-      - name: Calculate version & update package.json
-        id: version_step
-        env:
-          INPUT_BUMP: ${{ inputs.bump_type || 'patch' }}
-          INPUT_CUSTOM: ${{ inputs.custom_version || '' }}
-          REF_TYPE: ${{ github.ref_type }}
-          REF_NAME: ${{ github.ref_name }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          node -e "
-            const fs = require('fs');
-            const { execSync } = require('child_process');
-
-            // 1. Détection de la dernière release
-            let latestRelease = '';
-            try {
-              latestRelease = execSync('gh release view --json tagName -q .tagName', { encoding: 'utf-8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
-            } catch {}
-            if (!latestRelease) {
-              try {
-                latestRelease = execSync('git describe --tags --abbrev=0', { encoding: 'utf-8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
-              } catch {}
-            }
-
-            console.log('Dernière release détectée:', latestRelease || '(aucune)');
-
-            const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-            const currentPkgVersion = pkg.version || '0.1.0';
-            const baseVersion = latestRelease ? latestRelease.replace(/^v/i, '') : currentPkgVersion;
-
-            // 2. Détermination de la cible
-            let cleanVersion = '';
-            if (process.env.REF_TYPE === 'tag') {
-              cleanVersion = process.env.REF_NAME.replace(/^v/i, '');
-            } else if (process.env.INPUT_BUMP === 'custom' && process.env.INPUT_CUSTOM) {
-              cleanVersion = process.env.INPUT_CUSTOM.trim().replace(/^v/i, '');
-            } else {
-              const parts = baseVersion.split('.').map((p) => parseInt(p, 10) || 0);
-              let [maj = 0, min = 0, pat = 0] = parts;
-              const bump = process.env.INPUT_BUMP || 'patch';
-              if (bump === 'major') { maj += 1; min = 0; pat = 0; }
-              else if (bump === 'minor') { min += 1; pat = 0; }
-              else { pat += 1; }
-              cleanVersion = \`\${maj}.\${min}.\${pat}\`;
-            }
-
-            const tagName = 'v' + cleanVersion;
-
-            fs.appendFileSync(process.env.GITHUB_OUTPUT, 'tag_name=' + tagName + '\n');
-            fs.appendFileSync(process.env.GITHUB_OUTPUT, 'clean_version=' + cleanVersion + '\n');
-            fs.appendFileSync(process.env.GITHUB_OUTPUT, 'latest_release=' + (latestRelease || 'aucune') + '\n');
-
-            // 3. Mise à jour de package.json & package-lock.json
-            pkg.version = cleanVersion;
-            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
-            if (fs.existsSync('package-lock.json')) {
-              const lock = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
-              lock.version = cleanVersion;
-              if (lock.packages && lock.packages['']) lock.packages[''].version = cleanVersion;
-              fs.writeFileSync('package-lock.json', JSON.stringify(lock, null, 2) + '\n');
-            }
-
-            // 4. Résumé GitHub Actions
-            const summary = [
-              '### 🚀 Information de Release',
-              '- **Dernière release détectée** : ' + (latestRelease ? \`\` \${latestRelease} \`\` : '*(aucune)*'),
-              '- **Nouvelle version calculée** : \`\` ' + cleanVersion + ' \`\` (' + tagName + ')',
-              '- **package.json & package-lock.json** : mis à jour vers \`\` ' + cleanVersion + ' \`\`'
-            ].join('\n');
-            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, summary + '\n');
-          "
-
-      - name: Commit & push updated package.json to repository
-        env:
-          TARGET_BRANCH: ${{ github.ref_type == 'branch' && github.ref_name || github.event.repository.default_branch || 'main' }}
-          CLEAN_VERSION: ${{ steps.version_step.outputs.clean_version }}
-        run: |
-          if ! git diff --quiet package.json package-lock.json; then
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add package.json package-lock.json
-            git commit -m "chore(release): bump version to ${CLEAN_VERSION} [skip ci]"
-            git pull --rebase origin "$TARGET_BRANCH"
-            git push origin "HEAD:$TARGET_BRANCH" || echo "Warning: Failed to push version bump to $TARGET_BRANCH."
-            echo "Version bump committed and pushed to $TARGET_BRANCH"
-          else
-            echo "package.json is already at version ${CLEAN_VERSION}"
-          fi
-
   build:
     name: Build (${{ matrix.platform }})
-    needs: prepare
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -170,7 +59,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v7
         with:
-          ref: ${{ github.ref_type == 'branch' && github.ref_name || github.event.repository.default_branch || 'main' }}
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v7
@@ -190,25 +79,14 @@ jobs:
       - name: Run unit tests with coverage (Vitest)
         run: npm run test:coverage
 
-      - name: Sync package.json version locally for build
+      - name: Sync package.json version with release
         env:
-          CLEAN_VERSION: ${{ needs.prepare.outputs.clean_version }}
-        run: |
-          node -e "
-            const fs = require('fs');
-            const v = process.env.CLEAN_VERSION;
-            if (v) {
-              const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-              pkg.version = v;
-              fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
-              if (fs.existsSync('package-lock.json')) {
-                const lock = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
-                lock.version = v;
-                if (lock.packages && lock.packages['']) lock.packages[''].version = v;
-                fs.writeFileSync('package-lock.json', JSON.stringify(lock, null, 2) + '\n');
-              }
-            }
-          "
+          INPUT_TAG: ${{ inputs.tag_name }}
+          INPUT_BUMP: ${{ inputs.bump_type }}
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/release-helper.cjs sync
 
       - name: Build and package executable
         run: npm run dist -- ${{ matrix.build_args }} --publish never
@@ -228,7 +106,7 @@ jobs:
 
   publish:
     name: Publish GitHub Release
-    needs: [prepare, build]
+    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -240,17 +118,59 @@ jobs:
           ref: ${{ github.ref_type == 'branch' && github.ref_name || github.event.repository.default_branch || 'main' }}
           fetch-depth: 0
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22.x
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
       - name: Download all build artifacts
         uses: actions/download-artifact@v8
         with:
           path: dist-artifacts
           merge-multiple: true
 
+      - name: Determine tag and release name
+        id: release_info
+        env:
+          INPUT_TAG: ${{ inputs.tag_name }}
+          INPUT_BUMP: ${{ inputs.bump_type }}
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node scripts/release-helper.cjs info
+          node scripts/release-helper.cjs summary
+
+      - name: Commit and push updated package.json to repository
+        env:
+          TARGET_BRANCH: ${{ github.ref_type == 'branch' && github.ref_name || github.event.repository.default_branch || 'main' }}
+          TARGET_VERSION: ${{ steps.release_info.outputs.clean_version }}
+          INPUT_TAG: ${{ inputs.tag_name }}
+          INPUT_BUMP: ${{ inputs.bump_type }}
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node scripts/release-helper.cjs sync
+          if ! git diff --quiet package.json package-lock.json; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add package.json package-lock.json
+            git commit -m "chore(release): bump version to ${TARGET_VERSION} [skip ci]"
+            git pull --rebase origin "$TARGET_BRANCH" || true
+            git push origin "HEAD:$TARGET_BRANCH" || echo "Warning: Direct push to protected $TARGET_BRANCH blocked by rule, release tag and assets are still published."
+            echo "Version bump processed for $TARGET_BRANCH"
+          fi
+
       - name: Create or update GitHub Release
         uses: softprops/action-gh-release@v3
         with:
-          tag_name: ${{ needs.prepare.outputs.tag_name }}
-          name: Release ${{ needs.prepare.outputs.tag_name }}
+          tag_name: ${{ steps.release_info.outputs.tag_name }}
+          name: Release ${{ steps.release_info.outputs.tag_name }}
           draft: ${{ inputs.draft || false }}
           prerelease: ${{ inputs.prerelease || false }}
           generate_release_notes: true

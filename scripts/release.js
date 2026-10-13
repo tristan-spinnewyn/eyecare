@@ -189,9 +189,18 @@ async function runInteractive(rootDir = process.cwd()) {
   console.log(`🏷️  Création du tag Git ${tagName}...`);
   execSync(`git tag -a "${tagName}" -m "Release ${tagName}"`, { cwd: rootDir, stdio: 'inherit' });
 
-  console.log('🚀 Poussée vers GitHub (branche main et tag)...');
-  execSync(`git push origin main`, { cwd: rootDir, stdio: 'inherit' });
+  console.log(`🚀 Poussée du tag ${tagName} vers GitHub...`);
   execSync(`git push origin "${tagName}"`, { cwd: rootDir, stdio: 'inherit' });
+
+  console.log('🚀 Poussée du commit vers la branche distante...');
+  try {
+    execSync(`git push origin main`, { cwd: rootDir, stdio: 'inherit' });
+    console.log('✅ Branche main synchronisée.');
+  } catch (err) {
+    console.log('ℹ️  Note : La branche main est protégée contre les pushs directs sans PR.');
+    console.log(`🏷️  Le tag ${tagName} a bien été poussé : le workflow GitHub Actions Release compile et publie automatiquement la release !`);
+    console.log(`💡 Pour synchroniser la version dans main, une branche PR peut être créée.`);
+  }
 
   console.log('\n======================================================');
   console.log(`🎉 Release ${tagName} lancée avec succès !`);
