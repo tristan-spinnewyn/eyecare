@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Eyecare 20-20-20 — réduisez la fatigue oculaire en suivant la règle des 20-20-20",
   "main": "src/main/main.js",
-  "author": "Tristan Spinnewyn",
+  "author": "Tristan Spinnewyn <tristan.spinnewyn@protonmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -14,6 +14,7 @@
     "build": "electron-builder",
     "dist": "electron-builder",
     "dist:dir": "electron-builder --dir",
+    "make:icon": "node scripts/make-icon.cjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
@@ -28,6 +29,9 @@
   "build": {
     "appId": "com.eyecare.app",
     "productName": "Eyecare 20-20-20",
+    "directories": {
+      "buildResources": "build"
+    },
     "files": [
       "src/**/*",
       "assets/**/*",
@@ -39,15 +43,27 @@
     },
     "win": {
       "target": "nsis",
-      "artifactName": "Eyecare-20-20-20-Setup-${version}.${ext}"
+      "artifactName": "Eyecare-20-20-20-Setup-${version}.${ext}",
+      "icon": "build/icon.ico"
     },
     "linux": {
       "target": [
-        "AppImage",
-        "deb"
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        }
       ],
       "artifactName": "Eyecare-20-20-20-${version}.${ext}",
-      "category": "Utility"
+      "category": "Utility",
+      "maintainer": "Tristan Spinnewyn <tristan.spinnewyn@protonmail.com>"
     }
   }
 }
