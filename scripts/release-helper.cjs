@@ -131,8 +131,12 @@ function determineReleaseInfo(rootDir = process.cwd(), env = process.env, latest
   const refType = env.REF_TYPE || '';
   const refName = env.REF_NAME || '';
 
-  let latestRelease = latestReleaseOverride || env.LATEST_RELEASE || null;
-  if (latestRelease === null) {
+  let latestRelease;
+  if (latestReleaseOverride !== null && latestReleaseOverride !== undefined) {
+    latestRelease = latestReleaseOverride;
+  } else if (env.LATEST_RELEASE !== undefined && env.LATEST_RELEASE !== null) {
+    latestRelease = env.LATEST_RELEASE;
+  } else {
     latestRelease = getLatestReleaseTag(rootDir);
   }
   const baseVersion = latestRelease ? cleanVersion(latestRelease) : currentPkgVersion;
