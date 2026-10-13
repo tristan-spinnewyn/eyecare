@@ -1,6 +1,6 @@
 {
   "name": "eyecare-20-20-20",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Eyecare 20-20-20 — réduisez la fatigue oculaire en suivant la règle des 20-20-20",
   "main": "src/main/main.js",
   "author": "Tristan Spinnewyn <tristan.spinnewyn@protonmail.com>",
