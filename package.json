@@ -22,8 +22,8 @@
     "release": "node scripts/release.js"
   },
   "devDependencies": {
-    "@vitest/coverage-v8": "^5.0.4",
-    "electron": "^44.7.1",
+    "@vitest/coverage-v8": "^5.0.5",
+    "electron": "^44.9.0",
     "electron-builder": "^26.15.3",
     "vitest": "^5.0.4"
   },
